@@ -32,7 +32,7 @@ class SqlAgent:
         _set_env("OPENAI_API_KEY")
         _set_env("OPENAI_API_BASE")
         self.llm = init_chat_model("openai:gpt-4.1-nano")
-        self.db = SQLDatabase.from_uri("mysql+pymysql://root:root@192.168.196.195:3307/nfturbo?charset=utf8")
+        self.db = SQLDatabase.from_uri("")
         self.toolkit = SQLDatabaseToolkit(db=self.db, llm=self.llm)
         self.tools = self.toolkit.get_tools()
         if  custom:
