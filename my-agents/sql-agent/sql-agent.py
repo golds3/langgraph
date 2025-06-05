@@ -206,12 +206,12 @@ class SqlAgent:
 
 
 if __name__ == '__main__':
-    os.environ["OPENAI_API_KEY"] = "sk-FS0MXRcux9jhT9Mx84a92k2R8gPA3AMldHG5oRfn9HrXQl0O"
-    os.environ["OPENAI_API_BASE"] = "https://www.DMXapi.com/v1/"
+    os.environ["OPENAI_API_KEY"] = ""
+    os.environ["OPENAI_API_BASE"] = ""
     # sql_agent = SqlAgent()
     # # 查询哪个用户购买的藏品数量最多
     # sql_agent.query("有几个用户角色是CUSTOMER的，他们的手机号是多少")
 
     sql_agent_custom = SqlAgent(custom=True)
-    sql_agent_custom.query("哪个生效的藏品的价值最高，是多少，藏品的名字是什么")
+    sql_agent_custom.query("最近半年，哪个用户做的交易数量最多，交易金额是多少")
 
