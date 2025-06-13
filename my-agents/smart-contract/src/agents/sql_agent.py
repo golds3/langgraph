@@ -12,6 +12,7 @@ from langchain_community.utilities import SQLDatabase
 from langchain_core.messages import AIMessage
 from langgraph.constants import END
 from langgraph.graph import MessagesState, StateGraph
+from langgraph.graph.graph import CompiledGraph
 from langgraph.prebuilt import create_react_agent, ToolNode
 
 from libs.langgraph.langgraph.constants import START
@@ -31,8 +32,8 @@ class SqlAgent:
         """
         _set_env("OPENAI_API_KEY")
         _set_env("OPENAI_API_BASE")
-        self.llm = init_chat_model("openai:gpt-4.1-nano")
-        self.db = SQLDatabase.from_uri("")
+        self.llm = init_chat_model("openai:gpt-3.5-turbo")
+        self.db = SQLDatabase.from_uri("mysql+pymysql://root:root@localhost:3306/ai?charset=utf8")
         self.toolkit = SQLDatabaseToolkit(db=self.db, llm=self.llm)
         self.tools = self.toolkit.get_tools()
         if  custom:
@@ -86,6 +87,8 @@ class SqlAgent:
             only ask for the relevant columns given the question.
 
             DO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database.
+            - After you're done with your tasks, respond to the supervisor directly\n
+            - Respond ONLY with the results of your work, do NOT include ANY other text."
             """.format(
                 dialect=self.db.dialect,
                 top_k=5,
@@ -163,7 +166,7 @@ class SqlAgent:
         builder.add_edge("check_query", "run_query")
         builder.add_edge("run_query", "generate_query")
 
-        return builder.compile()
+        return builder.compile(name='sql_agent')
     def __create_agent_prebuilt__(self):
         system_prompt = """
         You are an agent designed to interact with a SQL database.
@@ -206,12 +209,12 @@ class SqlAgent:
 
 
 if __name__ == '__main__':
-    os.environ["OPENAI_API_KEY"] = ""
-    os.environ["OPENAI_API_BASE"] = ""
+    os.environ["OPENAI_API_KEY"] = "sk-FS0MXRcux9jhT9Mx84a92k2R8gPA3AMldHG5oRfn9HrXQl0O"
+    os.environ["OPENAI_API_BASE"] = "https://www.DMXapi.com/v1/"
     # sql_agent = SqlAgent()
     # # 查询哪个用户购买的藏品数量最多
-    # sql_agent.query("有几个用户角色是CUSTOMER的，他们的手机号是多少")
+    # sql_agent.query("有几个用户?> 角色是CUSTOMER的，他们的手机号是多少")
 
     sql_agent_custom = SqlAgent(custom=True)
-    sql_agent_custom.query("有哪些账号签署了质押这种票据监管，它们对应维护的邮箱是什么")
+    sql_agent_custom.query("有哪些账号只签署了贴现这种票据监管，它们对应维护的邮箱是什么")
 

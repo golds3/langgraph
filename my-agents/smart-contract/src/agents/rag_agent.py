@@ -31,13 +31,7 @@ class RagAgent:
 
     def __prepare_context__(self):
         """构建知识库"""
-        # urls = [
-        #     "https://lilianweng.github.io/posts/2024-11-28-reward-hacking/",
-        #     "https://lilianweng.github.io/posts/2024-07-07-hallucination/",
-        #     "https://lilianweng.github.io/posts/2024-04-12-diffusion-video/",
-        # ]
-        # docs = [WebBaseLoader(url).load() for url in urls]
-        docs_list = TextLoader(file_path="").load()
+        docs_list = TextLoader(file_path="/Users/ham/Desktop/project/ai/langgraph/my-agents/smart-contract/sources/合约规则说明.txt").load()
         # docs_list = [item for sublist in docs for item in sublist]
         text_splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
             chunk_size=100, chunk_overlap=50
@@ -137,6 +131,8 @@ class RagAgent:
                 "Use three sentences maximum and keep the answer concise.\n"
                 "Question: {question} \n"
                 "Context: {context}"
+                "- After you're done with your tasks, respond to the supervisor directly\n"
+                "- Respond ONLY with the results of your work, do NOT include ANY other text."
             )
 
             """Generate an answer."""
@@ -178,12 +174,12 @@ class RagAgent:
         workflow.add_edge("rewrite_question", "generate_query_or_respond")
 
         # Compile
-        return workflow.compile()
+        return workflow.compile(name='rag_agent')
 
 
 if __name__ == '__main__':
-    os.environ["OPENAI_API_KEY"] = ""
-    os.environ["OPENAI_API_BASE"] = ""
+    os.environ["OPENAI_API_KEY"] = "sk-FS0MXRcux9jhT9Mx84a92k2R8gPA3AMldHG5oRfn9HrXQl0O"
+    os.environ["OPENAI_API_BASE"] = "https://www.DMXapi.com/v1/"
     rag_agent = RagAgent()
     input = "如果账号要开通邮箱功能，有什么限制"
     rag_agent.rag_query(input)
