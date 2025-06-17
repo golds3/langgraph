@@ -6,6 +6,7 @@ import os
 import uuid
 from typing import Literal
 
+from dotenv import load_dotenv
 from langchain.chat_models import init_chat_model
 from langchain_community.agent_toolkits import SQLDatabaseToolkit
 from langchain_community.utilities import SQLDatabase
@@ -209,8 +210,14 @@ class SqlAgent:
 
 
 if __name__ == '__main__':
-    os.environ["OPENAI_API_KEY"] = "sk-FS0MXRcux9jhT9Mx84a92k2R8gPA3AMldHG5oRfn9HrXQl0O"
-    os.environ["OPENAI_API_BASE"] = "https://www.DMXapi.com/v1/"
+    # 加载 .env 文件
+    load_dotenv()
+
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    openai_api_base = os.getenv("OPENAI_API_BASE")
+
+    os.environ["OPENAI_API_KEY"] = openai_api_key
+    os.environ["OPENAI_API_BASE"] = openai_api_base
     # sql_agent = SqlAgent()
     # # 查询哪个用户购买的藏品数量最多
     # sql_agent.query("有几个用户?> 角色是CUSTOMER的，他们的手机号是多少")

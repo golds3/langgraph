@@ -2,6 +2,7 @@ import getpass
 import os
 from typing import Literal
 
+from dotenv import load_dotenv
 from langchain.chat_models import init_chat_model
 from langchain_community.document_loaders import WebBaseLoader, TextLoader
 from langchain_core.messages import HumanMessage
@@ -178,8 +179,14 @@ class RagAgent:
 
 
 if __name__ == '__main__':
-    os.environ["OPENAI_API_KEY"] = "sk-FS0MXRcux9jhT9Mx84a92k2R8gPA3AMldHG5oRfn9HrXQl0O"
-    os.environ["OPENAI_API_BASE"] = "https://www.DMXapi.com/v1/"
+    # 加载 .env 文件
+    load_dotenv()
+
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    openai_api_base = os.getenv("OPENAI_API_BASE")
+
+    os.environ["OPENAI_API_KEY"] = openai_api_key
+    os.environ["OPENAI_API_BASE"] = openai_api_base
     rag_agent = RagAgent()
     input = "如果账号要开通邮箱功能，有什么限制"
     rag_agent.rag_query(input)

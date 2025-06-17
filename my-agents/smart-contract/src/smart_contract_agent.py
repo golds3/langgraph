@@ -1,6 +1,7 @@
 import os
 from getpass import getpass
 
+from dotenv import load_dotenv
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import convert_to_messages
 from langgraph_supervisor import create_supervisor
@@ -12,8 +13,14 @@ def _set_env(key: str):
         os.environ[key] = getpass.getpass(f"{key}:")
 
 
-os.environ["OPENAI_API_KEY"] = "sk-FS0MXRcux9jhT9Mx84a92k2R8gPA3AMldHG5oRfn9HrXQl0O"
-os.environ["OPENAI_API_BASE"] = "https://www.DMXapi.com/v1/"
+# 加载 .env 文件
+load_dotenv()
+
+openai_api_key = os.getenv("OPENAI_API_KEY")
+openai_api_base = os.getenv("OPENAI_API_BASE")
+
+os.environ["OPENAI_API_KEY"] = openai_api_key
+os.environ["OPENAI_API_BASE"] = openai_api_base
 
 # agent 协调者
 # sql agent
